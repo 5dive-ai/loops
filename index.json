@@ -14,7 +14,7 @@
       "model": "claude-opus-4-8",
       "effort": "high",
       "tags": ["research", "market-intel", "competitive"],
-      "proof": { "receipts": "worth-knowing.md intel log; daily intel briefs; competitors_watchlist.md (updated multiple times/day)", "blogPost": "https://blog.5dive.com/blog/replace-competitive-intelligence-analyst-with-ai" },
+      "proof": { "receipts": "worth-knowing.md intel log; daily intel briefs; competitors_watchlist.md (updated multiple times/day)", "blogPost": "https://blog.5dive.com/blog/replace-ci-analyst-with-ai" },
       "feature": true,
       "rarity": "rare"
     },
