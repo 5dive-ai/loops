@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/5dive-ai/loops/main/schema.json",
+  "title": "Agentic Loops registry",
+  "type": "object",
+  "required": ["version", "loops"],
+  "properties": {
+    "version": { "type": "integer" },
+    "loops": { "type": "array", "items": { "$ref": "#/$defs/loop" } }
+  },
+  "$defs": {
+    "loop": {
+      "type": "object",
+      "required": ["slug", "jobTitle", "tagline", "trigger"],
+      "properties": {
+        "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "jobTitle": { "type": "string" },
+        "tagline": { "type": "string" },
+        "trigger": {
+          "type": "object",
+          "properties": {
+            "type": { "enum": ["schedule", "event"] },
+            "cron": { "type": "string" },
+            "event": { "type": "string" },
+            "label": { "type": "string" }
+          }
+        },
+        "skills": { "type": "array", "items": { "type": "string" } },
+        "requires": {
+          "type": "object",
+          "properties": {
+            "cli": { "type": "array", "items": { "type": "string" } },
+            "secrets": { "type": "array", "items": { "type": "string" } },
+            "mcp": { "type": "array", "items": { "type": "string" } },
+            "network": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "starterPrompt": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "tier": { "enum": ["frontier", "standard", "fast"] },
+        "effort": { "enum": ["low", "medium", "high"] },
+        "concurrency": { "enum": ["skip", "queue", "replace", "allow"] },
+        "persona": { "type": "string" },
+        "source": {
+          "type": "object",
+          "description": "Attribution for imported/community loops.",
+          "properties": {
+            "repo": { "type": "string" },
+            "url": { "type": "string" },
+            "author": { "type": "string" },
+            "license": { "type": "string" }
+          }
+        },
+        "imported": { "type": "boolean" }
+      }
+    }
+  }
+}
