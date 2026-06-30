@@ -63,6 +63,7 @@ natural language). That's the whole format.
 | `effort` | – | Optional reasoning budget: `low` \| `medium` \| `high`. |
 | `concurrency` | – | Overlap policy when a run is still going: `skip` (default) \| `queue` \| `replace` \| `allow`. |
 | `persona` | – | Optional. A plain name/handle for the character that runs the loop. Cosmetic only; **no external spec required**. A host that supports persona cards (e.g. OpenAgent) may resolve it; everything else ignores it. |
+| `agents` | – | Optional. An **ordered chain of roles** for a multi-agent loop (§4). When present, it replaces the single starter prompt — each role has its own prompt and the output of one role flows into the next. |
 | `timezone` | – | IANA tz for clock-based schedules (default `UTC`). |
 | `timeout` | – | Per-run wall-clock cap (`30m`, `1h30m`). |
 | `tags` | – | Free-form labels for the directory's Topics. |
@@ -176,7 +177,79 @@ can't honor the loop's trigger.
 
 ---
 
-## 4. Discovery (auto-indexing)
+## 4. Multi-agent loops — `agents:`
+
+Most loops are one agent doing one job on a timer. Some jobs are a **pipeline**: a researcher
+gathers, a writer drafts, a publisher ships. A loop expresses that as an ordered chain of
+roles under `agents:` — still one file, one trigger, one schedule, **one scheduled run**.
+
+A multi-agent loop is **not** "spawn N processes." It is one run executed as an ordered
+sequence of role-prompts, where each role's structured output feeds the next. That is the
+natural extension of §2's multi-heading body (several prompts run in order) — with a persona,
+optional per-role skills, and an explicit `{{previous_output}}` handoff per step.
+
+```yaml
+---
+name: intel-brief
+description: Competitive-intel pipeline — a researcher gathers what changed, a writer turns it into a sourced briefing.
+schedule: every 4h
+tier: frontier
+effort: high
+agents:
+  - role: researcher                       # required — kebab id, unique in the loop
+    persona: dude                          # optional — cosmetic, as in §2
+    skills: [deep-research, compile-knowledge]   # optional — per-role, additive to top-level skills
+    prompt: |
+      Scan our competitor set and the field for the last interval — launches,
+      pricing, funding, notable chatter. Return a structured list of what
+      changed, with sources. No prose, just the findings.
+  - role: writer
+    persona: theo
+    skills: [copywriting]
+    prompt: |
+      From the researcher's findings below, write a concise sourced briefing of
+      what changed and what it means for us, then post it to the team.
+      Findings:
+      {{previous_output}}
+tags: [research, market-intel, multi-agent]
+license: MIT
+---
+```
+
+**Semantics.**
+
+- Roles run in **array order**, strictly **sequential** — no branching or parallel fan-out in
+  v0.1. The chain is the loop's single scheduled run.
+- Each role receives the **prior role's output** as context, injected wherever the prompt
+  writes `{{previous_output}}` (or prepended if the placeholder is absent). The first role
+  gets none.
+- `skills` may be declared top-level (shared by every role) and/or per-role (additive). A role
+  with no `skills` inherits the loop's top-level set.
+- `trigger` (`schedule`/`event`), `requires`, `tier`, `effort`, `concurrency`, `timeout`, and
+  `tags` stay **top-level** — they govern the whole run, not one role.
+- **Back-compat is total.** No `agents:` block → the single starter-prompt body *is* the loop,
+  exactly as §1. A host that doesn't understand `agents:` ignores it (unknown fields never
+  error, §5) and can still surface the loop in discovery.
+
+**Handoff is structured, not chat.** Each role's output passes to the next as a defined
+artifact (a structured result, injected at `{{previous_output}}`) — never best-effort
+transcript scraping. That is the one hard requirement, and it's what makes an unattended run
+deterministic anywhere.
+
+**Execution is the host's business — and that's the point.** The spec mandates *what* (ordered
+roles, structured handoff), never *how* a host runs them. The simplest conforming
+implementation is a **for-loop over prompts**: run role 1, capture its output, run role 2 with
+that output substituted — no process spawning at all, which is why any harness with a scheduler
+can do it (a reference runner does exactly this in ~40 lines, shelling to whatever model CLI is
+present). A host with real multi-agent orchestration *may* instead give each role its own
+isolated agent context (cleaner, and parallel-able in a later spec) — e.g. on a 5dive runtime
+each role runs as a linked task that hands off a structured result. **Both satisfy the same
+observable contract: role *N* sees role *N-1*'s structured output.** The `LOOP.md` is
+byte-identical across them, so no execution model leaks into the portable file.
+
+---
+
+## 5. Discovery (auto-indexing)
 
 The directory is **not** hand-curated. Any public repo that (a) carries the GitHub topic
 `agenticloops` and (b) contains a valid `LOOP.md` is discoverable. A crawler walks the
@@ -188,7 +261,7 @@ run receipts outranks one that just has stars. (More in the registry docs.)
 
 ---
 
-## 5. Versioning
+## 6. Versioning
 
 This spec is `v0.1`. Breaking changes bump the minor version until `1.0`. A loop may pin
 `spec: 0.1` in frontmatter; absence means "latest". Unknown fields are ignored, not errors,
