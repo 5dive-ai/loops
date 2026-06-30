@@ -179,7 +179,7 @@ can't honor the loop's trigger.
 ## 4. Discovery (auto-indexing)
 
 The directory is **not** hand-curated. Any public repo that (a) carries the GitHub topic
-`agentic-loop` and (b) contains a valid `LOOP.md` is discoverable. A crawler walks the
+`agenticloops` and (b) contains a valid `LOOP.md` is discoverable. A crawler walks the
 GitHub search API on a schedule, validates each match against this spec, and rebuilds the
 index. Publishing a loop = pushing a conforming repo and tagging it. That's it.
 

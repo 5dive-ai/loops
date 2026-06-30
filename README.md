@@ -11,7 +11,7 @@ An **agentic loop** is an installable, recurring AI agent defined in a single fi
 
 ## Publish a loop
 1. Put a valid `LOOP.md` in a public repo.
-2. Add the GitHub topic **`agentic-loop`**.
+2. Add the GitHub topic **`agenticloops`**.
 3. The crawler discovers and indexes it automatically — no PR needed.
 
 Install any loop:
