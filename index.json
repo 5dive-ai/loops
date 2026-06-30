@@ -6,31 +6,106 @@
       "slug": "ci-analyst",
       "jobTitle": "Competitive Intelligence Analyst",
       "tagline": "Watches every competitor and the field, catches what changed, and writes a digest before it matters.",
-      "agent": ["community"],
+      "agent": [
+        "community"
+      ],
       "character": "dude",
-      "skills": ["deep-research", "compile-knowledge"],
-      "trigger": { "type": "schedule", "cron": "0 */4 * * *", "label": "Every 4h · daily digest" },
+      "skills": [
+        "deep-research",
+        "compile-knowledge"
+      ],
+      "trigger": {
+        "type": "schedule",
+        "cron": "0 */4 * * *",
+        "label": "Every 4h · daily digest"
+      },
       "starterPrompt": "Scan our competitor set and the field for the last interval — launches, pricing, funding, notable chatter. Update the watchlist and, once a day, write a concise sourced briefing of what changed and what it means for us, then post it to the team.",
       "model": "claude-opus-4-8",
       "effort": "high",
-      "tags": ["research", "market-intel", "competitive"],
-      "proof": { "receipts": "worth-knowing.md intel log; daily intel briefs; competitors_watchlist.md (updated multiple times/day)", "blogPost": "https://blog.5dive.com/blog/replace-ci-analyst-with-ai" },
+      "tags": [
+        "research",
+        "market-intel",
+        "competitive"
+      ],
+      "proof": {
+        "receipts": "worth-knowing.md intel log; daily intel briefs; competitors_watchlist.md (updated multiple times/day)",
+        "blogPost": "https://blog.5dive.com/blog/replace-ci-analyst-with-ai"
+      },
       "feature": true,
       "rarity": "rare"
+    },
+    {
+      "slug": "intel-brief",
+      "jobTitle": "Intel Brief — Analyst to Writer relay",
+      "tagline": "Two teammates in one loop: an analyst extracts what changed, hands off, and a writer turns it into a one-paragraph team brief.",
+      "agent": [
+        "community",
+        "marketing"
+      ],
+      "character": "dude → theo",
+      "agents": [
+        {
+          "role": "analyst",
+          "persona": "dude",
+          "summary": "From the last interval's activity, pick the 3 shifts most worth the team's attention. Return only 3 short bullets."
+        },
+        {
+          "role": "writer",
+          "persona": "theo",
+          "handoff": true,
+          "summary": "Turn the analyst's 3 bullets into a single tight paragraph (max 60 words), lead with what matters most."
+        }
+      ],
+      "skills": [],
+      "trigger": {
+        "type": "schedule",
+        "cron": "0 */4 * * *",
+        "label": "Every 4h"
+      },
+      "starterPrompt": "An analyst extracts the few shifts that matter from the last interval and returns three bullets. A writer receives them via {{previous_output}} and turns them into a one-paragraph team brief. One scheduled loop, two roles, one structured handoff.",
+      "model": "claude-opus-4-8",
+      "effort": "medium",
+      "tags": [
+        "research",
+        "market-intel",
+        "multi-agent",
+        "relay"
+      ],
+      "proof": {
+        "receipts": "the reference multi-agent loop for SPEC §4; every run signs a chain receipt"
+      },
+      "feature": true,
+      "rarity": "epic"
     },
     {
       "slug": "content-marketer",
       "jobTitle": "Content Marketer / Blog Writer",
       "tagline": "Picks a topic from fresh intel, researches it, drafts in brand voice, fact-checks, and publishes.",
-      "agent": ["marketing"],
+      "agent": [
+        "marketing"
+      ],
       "character": "theo",
-      "skills": ["deep-research", "humanizer", "copywriting"],
-      "trigger": { "type": "schedule", "cron": "0 9 * * *", "label": "Daily" },
+      "skills": [
+        "deep-research",
+        "humanizer",
+        "copywriting"
+      ],
+      "trigger": {
+        "type": "schedule",
+        "cron": "0 9 * * *",
+        "label": "Daily"
+      },
       "starterPrompt": "Pick a topic from the latest intel, research it deeply, draft a post in our brand voice, fact-check and humanize it, then publish.",
       "model": "claude-opus-4-8",
       "effort": "high",
-      "tags": ["marketing", "content", "blog"],
-      "proof": { "receipts": "50+ live posts at blog.5dive.com" },
+      "tags": [
+        "marketing",
+        "content",
+        "blog"
+      ],
+      "proof": {
+        "receipts": "50+ live posts at blog.5dive.com"
+      },
       "feature": false,
       "rarity": "common"
     },
@@ -38,15 +113,32 @@
       "slug": "social-media-manager",
       "jobTitle": "Social Media Manager",
       "tagline": "Turns each post into IG story / FB / Telegram-channel posts, formats the creative, and schedules them.",
-      "agent": ["marketing", "creative"],
+      "agent": [
+        "marketing",
+        "creative"
+      ],
       "character": "theo",
-      "skills": ["social", "video-use", "frontend-design", "ad-creative"],
-      "trigger": { "type": "schedule", "cron": "0 10 * * *", "label": "On publish · daily" },
+      "skills": [
+        "social",
+        "video-use",
+        "frontend-design",
+        "ad-creative"
+      ],
+      "trigger": {
+        "type": "schedule",
+        "cron": "0 10 * * *",
+        "label": "On publish · daily"
+      },
       "starterPrompt": "For each newly published post, produce IG story / FB / Telegram-channel variants, format the creative, and schedule them.",
       "model": "claude-sonnet-4-6",
       "effort": "medium",
-      "tags": ["marketing", "social"],
-      "proof": { "receipts": "live FB page; @5dive.ai IG; @ai5dive Telegram channel" },
+      "tags": [
+        "marketing",
+        "social"
+      ],
+      "proof": {
+        "receipts": "live FB page; @5dive.ai IG; @ai5dive Telegram channel"
+      },
       "feature": false,
       "rarity": "common"
     },
@@ -54,15 +146,29 @@
       "slug": "community-manager",
       "jobTitle": "Community Manager",
       "tagline": "Watches comments across YouTube/IG/FB, surfaces what needs a reply, and drafts responses.",
-      "agent": ["community"],
+      "agent": [
+        "community"
+      ],
       "character": "dude",
-      "skills": ["social", "notify-user"],
-      "trigger": { "type": "schedule", "cron": "0 * * * *", "label": "Hourly" },
+      "skills": [
+        "social",
+        "notify-user"
+      ],
+      "trigger": {
+        "type": "schedule",
+        "cron": "0 * * * *",
+        "label": "Hourly"
+      },
       "starterPrompt": "Check comments across our channels, surface the ones that need a reply, and draft responses for approval.",
       "model": "claude-sonnet-4-6",
       "effort": "medium",
-      "tags": ["community", "social"],
-      "proof": { "receipts": "comment_watch.py runs hourly with monitoring logs" },
+      "tags": [
+        "community",
+        "social"
+      ],
+      "proof": {
+        "receipts": "comment_watch.py runs hourly with monitoring logs"
+      },
       "feature": false,
       "rarity": "common"
     },
@@ -70,15 +176,31 @@
       "slug": "code-reviewer-verifier",
       "jobTitle": "Code Reviewer / Verifier",
       "tagline": "Independently reviews another agent's work in a fresh context and rejects what's wrong. The maker can't grade itself.",
-      "agent": ["dev"],
+      "agent": [
+        "dev"
+      ],
       "character": "dario",
-      "skills": ["code-review", "verify"],
-      "trigger": { "type": "event", "event": "task-done", "label": "On task-done / PR" },
+      "skills": [
+        "code-review",
+        "verify"
+      ],
+      "trigger": {
+        "type": "event",
+        "event": "task-done",
+        "label": "On task-done / PR"
+      },
       "starterPrompt": "When a task is marked done or a PR opens, review the work in a fresh context against its goal, run the verifier, and reject (with reasons) anything wrong.",
       "model": "claude-opus-4-8",
       "effort": "high",
-      "tags": ["engineering", "review", "verification"],
-      "proof": { "receipts": "task-queue verify system; live /agentic-loop demo", "sampleUrl": "https://5dive.com/agentic-loop" },
+      "tags": [
+        "engineering",
+        "review",
+        "verification"
+      ],
+      "proof": {
+        "receipts": "task-queue verify system; live /agentic-loop demo",
+        "sampleUrl": "https://5dive.com/agentic-loop"
+      },
       "feature": true,
       "rarity": "epic"
     },
@@ -86,15 +208,29 @@
       "slug": "chief-of-staff",
       "jobTitle": "Chief of Staff / Executive Assistant",
       "tagline": "Pulls status across the whole org, writes one briefing, and flags what's blocked on you.",
-      "agent": ["marketing"],
+      "agent": [
+        "marketing"
+      ],
       "character": "theo",
-      "skills": ["5dive-cli", "notify-user"],
-      "trigger": { "type": "schedule", "cron": "0 8 * * *", "label": "Daily" },
+      "skills": [
+        "5dive-cli",
+        "notify-user"
+      ],
+      "trigger": {
+        "type": "schedule",
+        "cron": "0 8 * * *",
+        "label": "Daily"
+      },
       "starterPrompt": "Pull status across the org, write one concise briefing, and push anything blocked on the human to them.",
       "model": "claude-sonnet-4-6",
       "effort": "medium",
-      "tags": ["ops", "exec"],
-      "proof": { "receipts": "daily briefing + blocker-push" },
+      "tags": [
+        "ops",
+        "exec"
+      ],
+      "proof": {
+        "receipts": "daily briefing + blocker-push"
+      },
       "feature": false,
       "rarity": "rare"
     }
