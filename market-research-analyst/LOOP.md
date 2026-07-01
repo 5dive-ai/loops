@@ -4,7 +4,7 @@ description: >
   A weekly market-research analyst. Sizes the market, maps segments and
   competitors, tracks pricing and demand signals, and writes a decision-ready
   research brief.
-schedule: weekly @ 09:00
+schedule: 0 9 * * 1
 skills:
   - 5dive-ai/skills/deep-research
   - 5dive-ai/skills/compile-knowledge

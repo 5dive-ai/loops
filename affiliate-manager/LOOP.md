@@ -4,7 +4,7 @@ description: >
   Runs an affiliate program end to end. Tracks referrals and conversions,
   calculates payouts, flags anomalies, and sends each affiliate their weekly
   numbers.
-schedule: weekly @ 09:00
+schedule: 0 9 * * 1
 requires:
   secrets: [STRIPE_API_KEY]
 tier: standard
