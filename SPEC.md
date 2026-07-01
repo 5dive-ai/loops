@@ -35,6 +35,7 @@ requires:                       # what the loop needs in its environment
 tier: frontier        # optional capability hint: frontier | standard | fast
 effort: high          # optional reasoning budget: high | medium | low
 concurrency: skip     # skip | queue | replace | allow  (overlap policy)
+budget: 200k          # optional per-run spend cap: tokens (200k) or cost ($2.00)
 tags: [research, market-intel, competitive]
 license: MIT
 ---
@@ -66,6 +67,7 @@ natural language). That's the whole format.
 | `agents` | – | Optional. An **ordered chain of roles** for a multi-agent loop (§4). When present, it replaces the single starter prompt — each role has its own prompt and the output of one role flows into the next. |
 | `timezone` | – | IANA tz for clock-based schedules (default `UTC`). |
 | `timeout` | – | Per-run wall-clock cap (`30m`, `1h30m`). |
+| `budget` | – | Optional **per-run spend cap** — a token count (`200k`) or a cost (`$2.00`). The complement to `timeout`: `timeout` bounds *how long* a run may take, `budget` bounds *how much* it may spend. Harness-mapped like `tier` — a host with a native task budget (a running token countdown the model self-moderates against) uses it; a host without one hard-stops the run at the ceiling. Never names a vendor billing SKU. |
 | `tags` | – | Free-form labels for the directory's Topics. |
 | `license` | – | SPDX id. |
 
@@ -225,8 +227,8 @@ license: MIT
   gets none.
 - `skills` may be declared top-level (shared by every role) and/or per-role (additive). A role
   with no `skills` inherits the loop's top-level set.
-- `trigger` (`schedule`/`event`), `requires`, `tier`, `effort`, `concurrency`, `timeout`, and
-  `tags` stay **top-level** — they govern the whole run, not one role.
+- `trigger` (`schedule`/`event`), `requires`, `tier`, `effort`, `concurrency`, `timeout`,
+  `budget`, and `tags` stay **top-level** — they govern the whole run, not one role.
 - **Back-compat is total.** No `agents:` block → the single starter-prompt body *is* the loop,
   exactly as §1. A host that doesn't understand `agents:` ignores it (unknown fields never
   error, §5) and can still surface the loop in discovery.
