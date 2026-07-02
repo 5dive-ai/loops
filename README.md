@@ -1,6 +1,6 @@
 # Agentic Loops — spec + registry
 
-The open standard and registry behind **[agenticloops.dev](https://agenticloops.dev)**.
+The open standard and registry behind **[agenticloops.dev](https://agenticloops.dev?utm_source=github&utm_medium=referral&utm_campaign=loops-readme)**.
 
 An **agentic loop** is an installable, recurring AI agent defined in a single file: a trigger, a set of skills, and a prompt. It runs on a schedule and completes a whole job on any agent harness.
 
