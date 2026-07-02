@@ -263,7 +263,41 @@ run receipts outranks one that just has stars. (More in the registry docs.)
 
 ---
 
-## 6. Versioning
+## 6. Verified publishers (optional signing)
+
+A publisher **may** sign a `LOOP.md` with an ed25519 key. Signing is a **trust signal,
+never a gate**: an unsigned loop installs and runs exactly like a signed one. A valid
+signature earns a *verified publisher* mark on the loop's directory page and in CLI
+install/run output — the same "proof, not popularity" posture as run receipts.
+
+Two single-line frontmatter fields carry it:
+
+```yaml
+publisher: did:key:z6Mk...   # who signed — a did:key encoding of the ed25519 public key
+signature: <base64>          # detached ed25519 signature (see below)
+```
+
+The signature covers the canonical body
+
+```
+{ v: 1, kind: "agenticloops-loop", name, publisher, sha256 }
+```
+
+serialized with sorted-key JSON stringification, where `sha256` is the hex digest of the
+`LOOP.md` text with the `signature:` line removed (the `publisher:` line **is** covered, so
+neither the content nor the claimed identity can be swapped post-signing). Verification is
+self-contained — the public key decodes straight from the `did:key`, so a verifier needs
+nothing but the file.
+
+Tooling: `npx agenticloops sign <dir>` signs with the machine's `~/.openagent/agent.key`
+identity (minted on first use — the same did:key that signs run receipts, so a publisher's
+loops, receipts, and agent card resolve to one identity). `npx agenticloops verify <ref>`
+checks any loop; an **invalid** signature is reported loudly and the loop is treated as
+unsigned. Editing a signed `LOOP.md` invalidates the signature — re-sign after edits.
+
+---
+
+## 7. Versioning
 
 This spec is `v0.1`. Breaking changes bump the minor version until `1.0`. A loop may pin
 `spec: 0.1` in frontmatter; absence means "latest". Unknown fields are ignored, not errors,
